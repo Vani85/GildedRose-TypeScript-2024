@@ -25,33 +25,36 @@ export class GildedRose {
 
       switch(name) {
           case 'Sulfuras, Hand of Ragnaros' :
-              return this.items;
+              break;
           case 'Aged Brie':
               quality = GildedRose.addQuality(quality, 1);
+              quality = sellIn == 0 ? GildedRose.addQuality(quality, 1) : quality;
               break;
           case 'Backstage passes':
               quality = GildedRose.updateBackstageQuality(sellIn,quality);
               break;
           case 'Conjured Mana Cake':
               quality = GildedRose.subtractQuality(quality, 2);
+              quality = sellIn == 0 ? GildedRose.subtractQuality(quality, 1) : quality;
               break;
           default :
               quality = GildedRose.subtractQuality(quality, 1);
+              quality = sellIn == 0 ? GildedRose.subtractQuality(quality, 1) : quality;
       }
-           
-      sellIn = sellIn - 1;
-      if (sellIn < 0) {
-          switch(name) {
-              case 'Aged Brie':
-                  quality = GildedRose.addQuality(quality, 1);
-                  break;
-              case 'Backstage passes' :
-                  quality = 0;
-                  break;
-              default :
-                  quality = GildedRose.subtractQuality(quality, 1);
-          }
-      }
+      if(name !== 'Sulfuras, Hand of Ragnaros')   
+          sellIn = sellIn - 1;
+      // if (sellIn < 0) {
+      //     switch(name) {
+      //         case 'Aged Brie':
+      //             quality = GildedRose.addQuality(quality, 1);
+      //             break;
+      //         case 'Backstage passes' :
+      //             quality = 0;
+      //             break;
+      //         default :
+      //             quality = GildedRose.subtractQuality(quality, 1);
+      //     }
+      // }
 
       this.items[i].sellIn = sellIn;
       this.items[i].quality = quality;
@@ -68,7 +71,9 @@ export class GildedRose {
   }
 
   static updateBackstageQuality(sellIn : number,  quality : number) {
-      if (sellIn < 6) {
+      if(sellIn == 0) {
+          quality = 0;
+      } else if (sellIn < 6) {
           quality = GildedRose.addQuality(quality, 3);
       } else if (sellIn < 11) {
           quality =  GildedRose.addQuality(quality, 2);
@@ -77,4 +82,5 @@ export class GildedRose {
       }
       return quality;
   }
+
 }

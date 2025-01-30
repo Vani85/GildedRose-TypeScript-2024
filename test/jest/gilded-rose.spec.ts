@@ -3,6 +3,15 @@ import { Item, GildedRose } from '@/gilded-rose';
 describe('Gilded Rose', () => {
 
   it('Once the sell by date has passed, Quality degrades twice as fast', () => {
+    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 5, 10), new Item('Bread', 5, 5)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Sulfuras, Hand of Ragnaros');
+    expect(items[0].quality).toBe(10);
+    expect(items[1].name).toBe('Bread');
+    expect(items[1].quality).toBe(4);
+  });
+
+  it('Once the sell by date has passed, Quality degrades twice as fast', () => {
     const gildedRose = new GildedRose([new Item('Bread', 0, 10)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe('Bread');
