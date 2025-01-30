@@ -75,4 +75,18 @@ export class GildedRose {
 
     return this.items;
   }
+
+  addQuality(quality : number, numberToAdd : number) {
+    if(quality < 50) {
+        quality = quality + numberToAdd;
+    } 
+    return quality
+  }
+
+  subtractQuality(quality : number, numberToSubtract : number) {
+    if(quality > 0) {
+        quality = quality - numberToSubtract;
+    } 
+    return quality;
+  }
 }
