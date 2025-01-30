@@ -30,7 +30,6 @@ export class GildedRose {
               quality = GildedRose.addQuality(quality, 1);
               break;
           case 'Backstage passes':
-              quality = GildedRose.addQuality(quality, 1);
               quality = GildedRose.updateBackstageQuality(sellIn,quality);
               break;
           case 'Conjured Mana Cake':
@@ -70,9 +69,11 @@ export class GildedRose {
 
   static updateBackstageQuality(sellIn : number,  quality : number) {
       if (sellIn < 6) {
-          quality = GildedRose.addQuality(quality, 2);
+          quality = GildedRose.addQuality(quality, 3);
       } else if (sellIn < 11) {
-          quality =  GildedRose.addQuality(quality, 1);
+          quality =  GildedRose.addQuality(quality, 2);
+      } else {
+        quality =  GildedRose.addQuality(quality, 1);
       }
       return quality;
   }
