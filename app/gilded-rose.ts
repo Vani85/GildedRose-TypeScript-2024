@@ -23,36 +23,35 @@ export class GildedRose {
       let quality : number = this.items[i].quality;
       let sellIn : number = this.items[i].sellIn;
 
-      if(name === 'Sulfuras, Hand of Ragnaros')
-        return this.items;
-
-      if (name != 'Aged Brie' && name != 'Backstage passes') {
-        quality = GildedRose.subtractQuality(quality, 1);
-      } else {
-          quality = GildedRose.addQuality(quality, 1);
-          if (name == 'Backstage passes') {
-            if (sellIn < 6) {
-              quality = GildedRose.addQuality(quality, 2);
-            } else if (sellIn < 11) {
-              quality =  GildedRose.addQuality(quality, 1);
-            }
-            
-          }
+      switch(name) {
+          case 'Sulfuras, Hand of Ragnaros' :
+              return this.items;
+          case 'Aged Brie':
+              quality = GildedRose.addQuality(quality, 1);
+              break;
+          case 'Backstage passes':
+              quality = GildedRose.addQuality(quality, 1);
+              quality = GildedRose.updateBackstageQuality(sellIn,quality);
+              break;
+          case 'Conjured Mana Cake':
+              quality = GildedRose.subtractQuality(quality, 2);
+              break;
+          default :
+              quality = GildedRose.subtractQuality(quality, 1);
       }
-      
-     
+           
       sellIn = sellIn - 1;
-      
       if (sellIn < 0) {
-        if (name != 'Aged Brie') {
-          if (name != 'Backstage passes') {
-            quality = GildedRose.subtractQuality(quality, 1);
-          } else {
-            quality = 0;
+          switch(name) {
+              case 'Aged Brie':
+                  quality = GildedRose.addQuality(quality, 1);
+                  break;
+              case 'Backstage passes' :
+                  quality = 0;
+                  break;
+              default :
+                  quality = GildedRose.subtractQuality(quality, 1);
           }
-        } else {
-          quality = GildedRose.addQuality(quality, 1);
-        }
       }
 
       this.items[i].sellIn = sellIn;
@@ -62,16 +61,19 @@ export class GildedRose {
   }
 
   static addQuality(quality : number, numberToAdd : number) {
-    if(quality < 50) {
-        quality = quality + numberToAdd;
-    }
-    return quality;
+      return quality < 50 ? quality + numberToAdd : quality;
   }
 
   static subtractQuality(quality : number, numberToSubtract : number) {
-    if(quality > 0) {
-        quality = quality - numberToSubtract;
-    } 
-    return quality;
+      return quality > 0 ?  quality - numberToSubtract : quality;
+  }
+
+  static updateBackstageQuality(sellIn : number,  quality : number) {
+      if (sellIn < 6) {
+          quality = GildedRose.addQuality(quality, 2);
+      } else if (sellIn < 11) {
+          quality =  GildedRose.addQuality(quality, 1);
+      }
+      return quality;
   }
 }
