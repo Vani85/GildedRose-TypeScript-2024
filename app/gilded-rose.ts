@@ -26,64 +26,49 @@ export class GildedRose {
       if(name === 'Sulfuras, Hand of Ragnaros')
         return this.items;
 
-      if (name != 'Aged Brie' && name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (quality > 0) {         
-            quality = quality - 1
-          
-        }
+      if (name != 'Aged Brie' && name != 'Backstage passes') {
+        quality = GildedRose.subtractQuality(quality, 1);
       } else {
-        if (quality < 50) {
-          quality = quality + 1
-          if (name == 'Backstage passes to a TAFKAL80ETC concert') {
+          quality = GildedRose.addQuality(quality, 1);
+          if (name == 'Backstage passes') {
             if (sellIn < 6) {
-              if (quality < 50) {
-                quality = quality + 3;
-              }
+              quality = GildedRose.addQuality(quality, 2);
             } else if (sellIn < 11) {
-              if (quality < 50) {
-                quality = quality + 2
-              }
+              quality =  GildedRose.addQuality(quality, 1);
             }
             
           }
-        }
       }
+      
      
       sellIn = sellIn - 1;
       
       if (sellIn < 0) {
         if (name != 'Aged Brie') {
-          if (name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (quality > 0) {
-                quality = quality - 1              
-            }
+          if (name != 'Backstage passes') {
+            quality = GildedRose.subtractQuality(quality, 1);
           } else {
             quality = 0;
           }
         } else {
-          if (quality < 50) {
-            quality= quality + 1
-          }
+          quality = GildedRose.addQuality(quality, 1);
         }
       }
 
       this.items[i].sellIn = sellIn;
       this.items[i].quality = quality;
     }
-
-    
-
     return this.items;
   }
 
-  addQuality(quality : number, numberToAdd : number) {
+  static addQuality(quality : number, numberToAdd : number) {
     if(quality < 50) {
         quality = quality + numberToAdd;
-    } 
-    return quality
+    }
+    return quality;
   }
 
-  subtractQuality(quality : number, numberToSubtract : number) {
+  static subtractQuality(quality : number, numberToSubtract : number) {
     if(quality > 0) {
         quality = quality - numberToSubtract;
     } 

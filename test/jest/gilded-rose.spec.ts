@@ -35,12 +35,37 @@ describe('Gilded Rose', () => {
     expect(items[0].quality).toBe(10);
     expect(items[0].sellIn).toBe(5);
   });
-  
-/*
 
-The Quality of an item can never increase to be more than 50
+  it('The Quality of an item can never increase to be more than 50', () => {
+    const gildedRose = new GildedRose([new Item('Aged Brie', 5, 50)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Aged Brie');
+    expect(items[0].quality).toBe(50);
+  });
 
-"Backstage passes", like aged brie, increases in Quality as its SellIn value approaches; Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days o less but Quality drops to 0 after the concert
+  it('"Backstage passes" increases in Quality as its SellIn value approaches; Quality increases by 2 when there are 10 days or less', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes', 9, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Backstage passes');
+    expect(items[0].quality).toBe(12);
+  });
+
+  it('"Backstage passes" increases in Quality as its SellIn value approaches; Quality increases by 3 when there are 5 days o less', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes', 4, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Backstage passes');
+    expect(items[0].quality).toBe(13);
+  });
+
+  it('"Backstage passes" increases in Quality as its SellIn value approaches; Quality drops to 0 after the concert', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes', 0, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Backstage passes');
+    expect(items[0].quality).toBe(0);
+  });
+
+
+  /*
 
 "Conjured" items degrade in Quality twice as fast as normal items
 */
