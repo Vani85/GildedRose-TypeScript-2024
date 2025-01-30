@@ -19,46 +19,46 @@ export class GildedRose {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      const name = this.items[i].name;
-      let quality = this.items[i].quality;
-      let sellIn = this.items[i].sellIn;
+      const name : string = this.items[i].name;
+      let quality : number = this.items[i].quality;
+      let sellIn : number = this.items[i].sellIn;
+
+      if(name === 'Sulfuras, Hand of Ragnaros')
+        return this.items;
 
       if (name != 'Aged Brie' && name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (quality > 0) {
-          if (name!= 'Sulfuras, Hand of Ragnaros') {
+        if (quality > 0) {         
             quality = quality - 1
-          }
+          
         }
       } else {
         if (quality < 50) {
           quality = quality + 1
           if (name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (sellIn < 11) {
-              if (quality < 50) {
-                quality = quality + 1
-              }
-            }
             if (sellIn < 6) {
               if (quality < 50) {
-                quality = quality + 1
+                quality = quality + 3;
+              }
+            } else if (sellIn < 11) {
+              if (quality < 50) {
+                quality = quality + 2
               }
             }
+            
           }
         }
       }
-      if (name != 'Sulfuras, Hand of Ragnaros') {
-        sellIn = sellIn - 1;
-      }
+     
+      sellIn = sellIn - 1;
+      
       if (sellIn < 0) {
         if (name != 'Aged Brie') {
           if (name != 'Backstage passes to a TAFKAL80ETC concert') {
             if (quality > 0) {
-              if (name != 'Sulfuras, Hand of Ragnaros') {
-                quality = quality - 1
-              }
+                quality = quality - 1              
             }
           } else {
-            quality = quality- quality
+            quality = 0;
           }
         } else {
           if (quality < 50) {
@@ -66,7 +66,12 @@ export class GildedRose {
           }
         }
       }
+
+      this.items[i].sellIn = sellIn;
+      this.items[i].quality = quality;
     }
+
+    
 
     return this.items;
   }
