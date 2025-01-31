@@ -57,11 +57,15 @@ export class GildedRose {
       return sellIn;
   }
   static addQuality(quality : number, numberToAdd : number) {
-      return (quality + numberToAdd) <= 50 ? quality + numberToAdd : 50;
+      let addedQuality = quality + numberToAdd;
+      addedQuality = addedQuality >= 0 ? addedQuality : 0;
+      return addedQuality > 50 ? 50 : addedQuality;
   }
 
   static subtractQuality(quality : number, numberToSubtract : number) {
-      return (quality - numberToSubtract) >= 0 ?  quality - numberToSubtract : 0;
+      let subractedQuality = quality - numberToSubtract;
+      subractedQuality = subractedQuality >= 50 ? 50 : subractedQuality;
+      return subractedQuality >= 0 ? subractedQuality : 0;
   }
 
   static updateBackstageQuality(sellIn : number,  quality : number) {

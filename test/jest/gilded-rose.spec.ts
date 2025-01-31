@@ -66,13 +66,6 @@ describe('Gilded Rose', () => {
   });
 
   it('The Quality of an item can never increase to be more than 50', () => {
-    const gildedRose = new GildedRose([new Item('Aged Brie', 5, 50)]);
-    const items = gildedRose.updateQuality();
-    expect(items[0].name).toBe('Aged Brie');
-    expect(items[0].quality).toBe(50);
-  });
-
-  it('The Quality of an item can never increase to be more than 50', () => {
     const gildedRose = new GildedRose([new Item('Backstage passes', 5, 50)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe('Backstage passes');
@@ -92,17 +85,25 @@ describe('Gilded Rose', () => {
   });
 
   it('Quality should not go beyond 50', () => {
-    const gildedRose = new GildedRose([new Item('Backstage passes', 9, 49),new Item('Backstage passes', 3, 48)]);
+    const gildedRose = new GildedRose([new Item('Backstage passes', 9, 49),new Item('Backstage passes', 3, 48), 
+                                      new Item('Aged Brie', 5, 50), new Item('Bread', 3, 80), new Item('Backstage passes', 3, 60)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe('Backstage passes');
     expect(items[0].quality).toBe(50);
     expect(items[1].name).toBe('Backstage passes');
     expect(items[1].quality).toBe(50);
+    expect(items[2].name).toBe('Aged Brie');
+    expect(items[2].quality).toBe(50);
+    expect(items[3].name).toBe('Bread');
+    expect(items[3].quality).toBe(50);
+    expect(items[4].name).toBe('Backstage passes');
+    expect(items[4].quality).toBe(50);
   });
 
   it('Quality should not go below 0', () => {
     const gildedRose = new GildedRose([new Item('Elixir of the Mongoose', 9, 1),new Item('Bread', 3, 0),
-                                      new Item('Conjured Mana Cake', 3, 1),new Item('Conjured Mana Cake', 3, 2)]);
+                                      new Item('Conjured Mana Cake', 3, 1),new Item('Conjured Mana Cake', 3, 2), 
+                                      new Item('Bread', 3, -2), new Item('Aged Brie', 3, -5)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe('Elixir of the Mongoose');
     expect(items[0].quality).toBe(0);
@@ -112,10 +113,16 @@ describe('Gilded Rose', () => {
     expect(items[2].quality).toBe(0);
     expect(items[3].name).toBe('Conjured Mana Cake');
     expect(items[3].quality).toBe(0);
+    expect(items[4].name).toBe('Bread');
+    expect(items[4].quality).toBe(0);
+    expect(items[5].name).toBe('Aged Brie');
+    expect(items[5].quality).toBe(0);
+
   });
 
   it('"Backstage passes" Quality increases by 3 when there are 5 days or less', () => {
-    const gildedRose = new GildedRose([new Item('Backstage passes', 4, 10),new Item('Backstage passes', 5, 10),new Item('Backstage passes', 6, 10)]);
+    const gildedRose = new GildedRose([new Item('Backstage passes', 4, 10),new Item('Backstage passes', 5, 10),
+                      new Item('Backstage passes', 6, 10)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe('Backstage passes');
     expect(items[0].quality).toBe(13);
