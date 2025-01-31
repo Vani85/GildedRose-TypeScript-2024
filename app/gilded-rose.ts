@@ -25,12 +25,12 @@ export class GildedRose {
 
       switch(name) {
           case 'Sulfuras, Hand of Ragnaros' :
+              quality = 80;
               break;
           case 'Aged Brie':
               quality = GildedRose.addQuality(quality, 1);
-              quality = sellIn == 0 ? GildedRose.addQuality(quality, 1) : quality;
               break;
-          case 'Backstage passes':
+          case (name.match(/^Backstage passes/) || {}).input: 
               quality = GildedRose.updateBackstageQuality(sellIn,quality);
               break;
           case 'Conjured Mana Cake':
@@ -41,37 +41,31 @@ export class GildedRose {
               quality = GildedRose.subtractQuality(quality, 1);
               quality = sellIn == 0 ? GildedRose.subtractQuality(quality, 1) : quality;
       }
-      if(name !== 'Sulfuras, Hand of Ragnaros')   
-          sellIn = sellIn - 1;
-      // if (sellIn < 0) {
-      //     switch(name) {
-      //         case 'Aged Brie':
-      //             quality = GildedRose.addQuality(quality, 1);
-      //             break;
-      //         case 'Backstage passes' :
-      //             quality = 0;
-      //             break;
-      //         default :
-      //             quality = GildedRose.subtractQuality(quality, 1);
-      //     }
-      // }
-
+      
+      sellIn = GildedRose.updateSellIn(sellIn,name);
+      
       this.items[i].sellIn = sellIn;
       this.items[i].quality = quality;
     }
     return this.items;
   }
 
+  static updateSellIn(sellIn : number, name : string) {
+      if(name !== 'Sulfuras, Hand of Ragnaros')   
+          sellIn = sellIn - 1;
+
+      return sellIn;
+  }
   static addQuality(quality : number, numberToAdd : number) {
-      return quality < 50 ? quality + numberToAdd : quality;
+      return (quality + numberToAdd) <= 50 ? quality + numberToAdd : 50;
   }
 
   static subtractQuality(quality : number, numberToSubtract : number) {
-      return quality > 0 ?  quality - numberToSubtract : quality;
+      return (quality - numberToSubtract) >= 0 ?  quality - numberToSubtract : 0;
   }
 
   static updateBackstageQuality(sellIn : number,  quality : number) {
-      if(sellIn == 0) {
+      if(sellIn <= 0) {
           quality = 0;
       } else if (sellIn < 6) {
           quality = GildedRose.addQuality(quality, 3);
